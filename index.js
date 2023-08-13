@@ -80,27 +80,27 @@ const Tree = (array) => {
         }
     }
 
-    // function findNode(value, currentNode = root){
-    //     if (currentNode === null){
-    //         return 
-    //     }
-    //     let nodeValue = currentNode.data
+    function findNode(value, currentNode = root){
+        if (currentNode === null){
+            return 
+        }
+        let nodeValue = currentNode.data
 
-    //     if (value === nodeValue){
-    //         return currentNode
-    //     } 
-    //     if (value < nodeValue){
-    //         if (currentNode.left !== null){
-    //             currentNode = findNode(value, currentNode.left)
-    //             return currentNode
-    //         } 
-    //     } else {
-    //         if (currentNode.right !== null){
-    //             currentNode = findNode(value, currentNode.right)
-    //             return currentNode
-    //         } 
-    //     }
-    // }
+        if (value === nodeValue){
+            return currentNode
+        } 
+        if (value < nodeValue){
+            if (currentNode.left !== null){
+                currentNode = findNode(value, currentNode.left)
+                return currentNode
+            } 
+        } else {
+            if (currentNode.right !== null){
+                currentNode = findNode(value, currentNode.right)
+                return currentNode
+            } 
+        }
+    }
 
     const minValue = (node) => {
         let minValue = node.data;
