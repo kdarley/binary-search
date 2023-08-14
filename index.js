@@ -80,7 +80,7 @@ const Tree = (array) => {
         }
     }
 
-    function findNode(value, currentNode = root){
+    const findNode = (value, currentNode = root) => {
         if (currentNode === null){
             return 
         }
@@ -142,22 +142,41 @@ const Tree = (array) => {
         return currentNode
     }
 
+    const levelOrder = (currentNode = root, func = null) => {
+        if (currentNode === null){
+            return
+        }
+        let levelOrderArray = []
+        let queue = [currentNode]
 
+        while (queue.length !== 0){
+            node = queue.shift()
+            if (func !== null){
+                func(node.data)
+            } else {
+                levelOrderArray.push(node.data)
+            }
+
+            if (node.left !== null){
+                queue.push(node.left)
+            }
+            if (node.right !== null){
+                queue.push(node.right)
+            }
+        }
+        return levelOrderArray
+    }
 
     return {
         prettyPrint,
         insert, 
-        deleteNode
+        deleteNode, 
+        findNode,
+        levelOrder
     }
 }
 
 let t = Tree([1, 7, 4, 23, 8, 9, 4, 3, 7, 9, 67, 6345, 324,6 ,3 ,2, 19, 10])
 // let t = Tree([])
 t.prettyPrint()
-t.deleteNode(8)
-t.deleteNode(7)
-t.prettyPrint()
-t.deleteNode(9)
-t.deleteNode(1)
-t.deleteNode(2)
-t.prettyPrint()
+console.log(t.levelOrder())
