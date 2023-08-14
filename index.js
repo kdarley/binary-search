@@ -167,16 +167,164 @@ const Tree = (array) => {
         return levelOrderArray
     }
 
+    const inOrder = (currentNode = root, func = null) => {
+        if (currentNode === null){
+            return
+        }
+        let inOrderArray = []
+        
+        function traverse(node){
+            if (node !== null){
+                traverse(node.left)
+                if (func) {
+                    func(node.data)
+                } else {
+                    inOrderArray.push(node.data)
+                }
+                traverse(node.right)
+            }
+        }
+ 
+        traverse(currentNode)
+        return inOrderArray
+    }
+
+    const preOrder = (currentNode = root, func = null) => {
+        if (currentNode === null){
+            return
+        }
+
+        let preOrderArray = []
+
+        function traverse(node){
+            if (node !== null){
+                if (func) {
+                    func(node.data)
+                } else {
+                    preOrderArray.push(node.data)
+                }
+                traverse(node.left)
+                traverse(node.right)
+            }
+        }
+
+        traverse(currentNode)
+        return preOrderArray
+    }
+
+    const postOrder = (currentNode = root, func = null) => {
+        if (currentNode === null){
+            return
+        }
+
+        let postOrderArray = []
+
+        function traverse(node){
+            if (node !== null){
+                traverse(node.right)
+                traverse(node.left)
+                if (func) {
+                    func(node.data)
+                } else {
+                    postOrderArray.push(node.data)
+                }                
+            }
+        }
+
+        traverse(currentNode)
+        return postOrderArray
+    }
+
+    const height = (currentNode = root) => {
+        if (currentNode === null){
+            return 0; // first height will be 0
+        }
+
+        const leftHeight = height(currentNode.left)
+        const rightHeight = height(currentNode.right)
+
+        return Math.max(leftHeight, rightHeight)+1 // first height will be 0 + 1
+    }
+
+    const depth = (targetNodeValue, currentNode = root, currentDepth = 0) => {
+        if (currentNode === null){
+            return null // node not found, 
+        }
+
+        if (currentNode.data === targetNodeValue) {
+            return currentDepth
+        }
+
+        const leftDepth = depth(targetNodeValue, currentNode.left, currentDepth+1)
+        const rightDepth = depth(targetNodeValue, currentNode.right, currentDepth+1)
+
+        if (leftDepth !== null){
+            return leftDepth
+        }
+        return rightDepth
+    }
+
+    const isBalanced = (currentNode = root) => {
+        if (currentNode === null){
+            return true
+        }
+        const leftHeight = height(currentNode.left)
+        const rightHeight = height(currentNode.right)
+
+        return (Math.abs(leftHeight - rightHeight) <= 1 && isBalanced(currentNode.left) && isBalanced(currentNode.right))
+    }
+
+    const rebalance = (currentNode = root) => {
+        if (currentNode === null){
+            return null
+        }
+        if (isBalanced(currentNode) === true){
+            return
+        }
+        let array = levelOrder(currentNode)      
+
+        root = buildTree(array)
+    }
+
     return {
         prettyPrint,
         insert, 
         deleteNode, 
         findNode,
-        levelOrder
+        levelOrder,
+        inOrder,
+        preOrder,
+        postOrder,
+        height,
+        depth,
+        isBalanced,
+        rebalance
     }
 }
 
-let t = Tree([1, 7, 4, 23, 8, 9, 4, 3, 7, 9, 67, 6345, 324,6 ,3 ,2, 19, 10])
-// let t = Tree([])
+function createRandomArray(length = 23, min = 0, max =100){
+    const randomArray = []
+
+    for (let i = 0; i<length; i++){
+        const randomNumber = Math.floor(Math.random()*(max-min+1)) + min;
+        randomArray.push(randomNumber)
+    }
+    return randomArray
+}
+
+let randArray = createRandomArray()
+let t = Tree(randArray)
+
 t.prettyPrint()
-console.log(t.levelOrder())
+console.log(t.isBalanced())
+console.log(t.preOrder())
+console.log(t.postOrder())
+console.log(t.inOrder())
+
+let addMore = createRandomArray(43)
+addMore.forEach((randomNumber) => t.insert(randomNumber))
+t.prettyPrint()
+console.log(t.isBalanced())
+t.rebalance()
+t.prettyPrint()
+console.log(t.isBalanced())
